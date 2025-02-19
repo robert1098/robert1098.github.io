@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dan Maternjeg Jezika - Bosna</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: linear-gradient(to right, #ffcc00, #ff6600); text-align: center; }
+        .landing { 
+            background: url('https://example.com/bosnia-landscape.jpg') center/cover no-repeat; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .landing h1 { 
+            font-size: 3.5em; 
+            text-shadow: 3px 3px 6px black; 
+            color: white;
+            opacity: 0;
+            animation: fadeInText 2s ease-in-out forwards;
+        }
+        .landing p { 
+            font-size: 1.7em; 
+            max-width: 700px; 
+            opacity: 0;
+            animation: fadeInText 2s ease-in-out 0.5s forwards;
+        }
+        .start-btn { 
+            padding: 12px 25px; 
+            font-size: 1.3em; 
+            background: white; 
+            color: #ff6600; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInText 2s ease-in-out 1s forwards;
+        }
+        .start-btn:hover { background: #ffcc00; transform: scale(1.1); }
+        .container { max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px #ccc; opacity: 0; animation: fadeIn 2s ease-in-out 1.5s forwards; }
+        h1, h2 { color: #4a4a4a; }
+        form { text-align: left; }
+        label, input, select, textarea { display: block; width: 100%; margin-bottom: 10px; }
+        input, select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #28a745; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        .header-img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 8px; }
+        .word-list { margin-top: 20px; text-align: left; }
+        .word-item { background: #eef; padding: 10px; margin: 5px 0; border-radius: 5px; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="landing">
+        <h1>Dobrodošli na Dan Maternjeg Jezika</h1>
+        <p>Sačuvajmo jezičko bogatstvo Bosne i Hercegovine prijavljujući riječi iz naših lokalnih dijalekata.</p>
+        <button class="start-btn" onclick="document.getElementById('mainContent').scrollIntoView({behavior: 'smooth'})">Počnimo</button>
+    </div>
+
+    <div class="container" id="mainContent">
+        <img src="https://example.com/mother-language-day.jpg" alt="Dan Maternjeg Jezika" class="header-img">
+        <h1>Dan Maternjeg Jezika u Bosni</h1>
+        <p>Pridružite se očuvanju jezičke raznolikosti Bosne i Hercegovine prijavljivanjem riječi iz vašeg dijalekta.</p>
+        
+        <h2>Prijavite Riječ</h2>
+        <form id="wordForm">
+            <label for="word">Riječ (Obavezno):</label>
+            <input type="text" id="word" name="word" required>
+            
+            <label for="meaning">Značenje/Definicija (Obavezno):</label>
+            <textarea id="meaning" name="meaning" required></textarea>
+            
+            <label for="example">Primjer Upotrebe (Opcionalno):</label>
+            <textarea id="example" name="example"></textarea>
+            
+            <label for="region">Regija/Dijalekat:</label>
+            <select id="region" name="region">
+                <option value="Sarajevo">Sarajevo</option>
+                <option value="Tuzla">Tuzla</option>
+                <option value="Banja Luka">Banja Luka</option>
+                <option value="Mostar">Mostar</option>
+            </select>
+            
+            <label for="contributor">Ime Prijavioca (Opcionalno):</label>
+            <input type="text" id="contributor" name="contributor">
+            
+            <button type="submit">Pošalji Riječ</button>
+        </form>
+        
+        <h2>Prijavljene Riječi</h2>
+        <div id="wordList" class="word-list"></div>
+    </div>
+
+    <script>
+        // Function to load and display the stored words
+        function loadWords() {
+            const wordList = JSON.parse(localStorage.getItem('words')) || [];
+            const wordListContainer = document.getElementById('wordList');
+            wordListContainer.innerHTML = ''; // Clear current list
+
+            wordList.forEach(word => {
+                const wordItem = document.createElement('div');
+                wordItem.classList.add('word-item');
+                wordItem.innerHTML = `
+                    <strong>Riječ:</strong> ${word.word}<br>
+                    <strong>Značenje:</strong> ${word.meaning}<br>
+                    ${word.example ? `<strong>Primjer:</strong> ${word.example}<br>` : ''}
+                    <strong>Regija:</strong> ${word.region}<br>
+                    ${word.contributor ? `<strong>Prijavitelj:</strong> ${word.contributor}` : ''}
+                `;
+                wordListContainer.appendChild(wordItem);
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('wordForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from reloading the page
+
+            const word = document.getElementById('word').value;
+            const meaning = document.getElementById('meaning').value;
+            const example = document.getElementById('example').value;
+            const region = document.getElementById('region').value;
+            const contributor = document.getElementById('contributor').value;
+
+            // Store new word in localStorage
+            const wordList = JSON.parse(localStorage.getItem('words')) || [];
+            wordList.push({ word, meaning, example, region, contributor });
+            localStorage.setItem('words', JSON.stringify(wordList));
+
+            // Reload the word list
+            loadWords();
+
+            // Reset the form fields
+            document.getElementById('wordForm').reset();
+        });
+
+        // Load the words when the page loads
+        window.onload = loadWords;
+    </script>
+</body>
+</html>
+
